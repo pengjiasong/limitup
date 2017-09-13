@@ -1,0 +1,5 @@
+{
+    "require": {
+		"tencentyun-api/qcloudapi-sdk-php": "dev-master"
+    }
+}
