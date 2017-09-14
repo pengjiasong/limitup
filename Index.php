@@ -33,10 +33,14 @@ while(1){
 			foreach($match1[1] as $item){
 				$parm = explode(',' , $item);
 				//自选
-				if(!empty($data[$parm[1]]) && $parm[4]>4 && date('H') < 10 && $data[$parm[1]][1] < 9.5 && empty($_SESSION[$parm[1]][4])){
+				if(!empty($data[$parm[1]]) && $parm[4]>4 && $data[$parm[1]][1] < 9.5 && empty($_SESSION[$parm[1]][4])){
 					$msg = "您的订单编号：\r\n".$parm[1]."\r\n,物流信息：\r\n".$parm[2];
 					$msg = urlencode($msg);
-					$daytemp = array_merge($daytemp,sendinfo($parm));
+					
+					$daytemp[$parm[1]] = sendinfo($parm);
+					if(date('H') < 10 || !empty($data[$parm[1]])){
+						send($msg,18580716334);
+					}
 					$_SESSION[$parm[1]]['send'] = 1;
 				}
 				//所有
@@ -45,8 +49,7 @@ while(1){
 					if(empty($_SESSION[$parm[1]]) && substr($parm[1] , 0 , 1 ) != 3 && empty($_SESSION[$parm[1]][4])){
 						$parm['send'] = 0;
 						$_SESSION[$parm[1]]=$parm;
-						$daytemp = sendinfo($parm);
-						$daytemp = array_merge($daytemp,sendinfo($parm));
+						$daytemp[$parm[1]] = sendinfo($parm);
 					}
 				}	
 				if(!empty($_SESSION[$parm[1]][4]) && $_SESSION[$parm[1]][4] != $parm[4] && $parm[4] > 8 && $_SESSION[$parm[1]]['send'] == 0 && !in_array($parm[1],$data)){
@@ -68,16 +71,16 @@ function sendinfo($parm){
 	// $zhejia = round($parm[3]/($parm[4]/100+1) * 1.085 , 2);
 	// $msg = "您的订单编号：\r\n".$gupiaodaima."\r\n,物流信息：\r\n".$parm[2];
 
-	$daytemp[$gupiaodaima][] = $parm[2];
-	$daytemp[$gupiaodaima][] = $parm[4];
-	$daytemp[$gupiaodaima][] = date('d');
+	$daytemp[] = $parm[2];
+	$daytemp[] = $parm[4];
+	$daytemp[] = date('d');
 	$first = substr($gupiaodaima , 0 , 1 );
 	if($first == 6){
 		$prefix = 'sh';
 	}else{
 		$prefix = 'sz';
 	}
-	$daytemp[$gupiaodaima][] = $prefix;
+	$daytemp[] = $prefix;
 	return $daytemp;
 }
 
