@@ -3,7 +3,7 @@ include('common.php');
 set_time_limit(0);
 ini_set('max_execution_time', 100*3600*3600*3600);
 ini_set("memory_limit","1000M");
-$day = date('d');
+$day = date('d'); 
 
 if($day%10 == 0){
 	$newurl = 'http://datainterface.eastmoney.com/EM_DataCenter/JS.aspx?type=NS&sty=NSSTV5&st=12&sr=-1&p=1&ps=100&js=var%20CURggAIV={pages:(pc),data:[(x)]}&stat=1&rt=49731936';
