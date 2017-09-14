@@ -5,7 +5,7 @@ $datafile = empty($_GET['datafile']) ? 'SelfSelect' : $_GET['datafile'];
 include('data/'.$datafile.'.php');
 if(empty($data)){
 	exit;
-}
+} 
 foreach($data as $key=>$value){
 	$sinaarr[] = $value['3'].$key;
 }	
