@@ -38,7 +38,7 @@ while(1){
 					$msg = urlencode($msg);
 					
 					$daytemp[$parm[1]] = sendinfo($parm);
-					if(date('H') < 10 || !empty($data[$parm[1]])){
+					if((date('H') < 10 || !empty($data[$parm[1]])) && $_SESSION[$parm[1]]['send'] == 0){
 						send($msg,18580716334);
 					}
 					$_SESSION[$parm[1]]['send'] = 1;
