@@ -20,7 +20,7 @@ while(1){
 			fwrite($fp, '<?php $data='.var_export($daytemp, true).';?>');
 			fclose($fp);
 		}
-		if(date('H') >= 15){
+		if(date('H') >= 15 || date('H') < 9){
 			exit();
 		}
 	}
