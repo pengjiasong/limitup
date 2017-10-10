@@ -13,16 +13,17 @@ ob_clean();
 include('data/SelfSelect.php');
 $daytemp = array();
 
+
 while(1){
-	if(date('H') >= 15 || date('Hi')==='0930' || date('H')==='10'){
+	if(date('H') >= 15){
 		if(!empty($daytemp)){
 			$fp = fopen('data/daytemp.php', 'w');
 			fwrite($fp, '<?php $data='.var_export($daytemp, true).';?>');
 			fclose($fp);
 		}
-		if(date('H') >= 15 || date('H') < 9){
+	}
+	if(date('H') >= 15 || date('H') < 9){
 			exit();
-		}
 	}
 	sleep(1);
 	$url = 'http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx/JS.aspx?type=ct&st=(ChangePercent)&sr=-1&p=1&ps=100&js=var%20mSoQyijv={pages:(pc),date:%222014-10-22%22,data:[(x)]}&token=894050c76af8597a853f5b408b759f5d&cmd=C._AB&sty=DCFFITA&rt=49698198';
@@ -39,7 +40,7 @@ while(1){
 					
 					$daytemp[$parm[1]] = sendinfo($parm);
 					if((date('H') < 10 || !empty($data[$parm[1]])) && $_SESSION[$parm[1]]['send'] == 0){
-						send($msg,18580716334);
+						// send($msg,18580716334);
 					}
 					$_SESSION[$parm[1]]['send'] = 1;
 				}
@@ -56,13 +57,15 @@ while(1){
 					$msg = "您的订单编号：\r\n".$parm[1]."\r\n,物流信息：\r\n".$parm[2];
 					$msg = urlencode($msg);
 					if(date('H') < 10 || !empty($data[$parm[1]])){
-						send($msg,18580716334);
+						// send($msg,18580716334);
 					}	
 					$_SESSION[$parm[1]]['send'] = 1;
 				}
 			}
 		}
 	}
+	print_r($_SESSION);
+	exit;
 }
 
 
