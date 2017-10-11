@@ -64,8 +64,6 @@ while(1){
 			}
 		}
 	}
-	print_r($_SESSION);
-	exit;
 }
 
 
