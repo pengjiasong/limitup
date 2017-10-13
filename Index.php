@@ -26,7 +26,7 @@ while(1){
 			exit();
 	}
 	sleep(1);
-	$url = 'http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx/JS.aspx?type=ct&st=(ChangePercent)&sr=-1&p=1&ps=100&js=var%20mSoQyijv={pages:(pc),date:%222014-10-22%22,data:[(x)]}&token=894050c76af8597a853f5b408b759f5d&cmd=C._AB&sty=DCFFITA&rt=49698198';
+	$url = 'http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx/JS.aspx?type=ct&st=(ChangePercent)&sr=-1&p=1&ps=200&js=var%20mSoQyijv={pages:(pc),date:%222014-10-22%22,data:[(x)]}&token=894050c76af8597a853f5b408b759f5d&cmd=C._AB&sty=DCFFITA&rt=49698198';
 	$content = file_get_contents($url);
 
 	if(preg_match('/data:\[([^\[\]]+)\]/' , $content , $match)){
@@ -35,6 +35,7 @@ while(1){
 				$parm = explode(',' , $item);
 				//自选
 				if(!empty($data[$parm[1]]) && $parm[4]>4 && $data[$parm[1]][1] < 9.5 && empty($_SESSION[$parm[1]][4])){
+					
 					$msg = "您的订单编号：\r\n".$parm[1]."\r\n,物流信息：\r\n".$parm[2];
 					$msg = urlencode($msg);
 					
