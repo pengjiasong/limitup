@@ -5,9 +5,6 @@ date_default_timezone_set('Asia/Shanghai');
 if(in_array(date('w'),array(6,7))){
 	exit();
 }
-if(date('H') >= 15 || date('H') < 9){
-	exit();
-}
 ignore_user_abort(true);
 set_time_limit(0); // 取消脚本运行时间的超时上限
 echo str_repeat(" ",1024);
@@ -25,6 +22,9 @@ while(1){
 			fwrite($fp, '<?php $data='.var_export($daytemp, true).';?>');
 			fclose($fp);
 		}
+	}
+	if(date('H') >= 15 || date('Hi') < 930){
+		exit();
 	}
 	sleep(1);
 	$url = 'http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx/JS.aspx?type=ct&st=(ChangePercent)&sr=-1&p=1&ps=200&js=var%20mSoQyijv={pages:(pc),date:%222014-10-22%22,data:[(x)]}&token=894050c76af8597a853f5b408b759f5d&cmd=C._AB&sty=DCFFITA&rt=49698198';
