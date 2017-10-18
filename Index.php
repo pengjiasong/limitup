@@ -23,7 +23,7 @@ while(1){
 			fclose($fp);
 		}
 	}
-	if(date('H') >= 15 || date('Hi') < 930){
+	if(date('H') >= 15){
 		exit();
 	}
 	sleep(1);
