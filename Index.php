@@ -14,7 +14,6 @@ flush();
 ob_clean();
 include('data/SelfSelect.php');
 $daytemp = array();
-
 while(1){
 	if(date('H') >= 15){
 		if(!empty($daytemp)){
@@ -22,8 +21,33 @@ while(1){
 			fwrite($fp, '<?php $data='.var_export($daytemp, true).';?>');
 			fclose($fp);
 		}
-	}
-	if(date('H') >= 15){
+		foreach($data as $key=>$value){
+			$sinaarr[] = $value['3'].$key;
+		}	
+		if(!empty($sinaarr)){
+			$content = file_get_contents('http://hq.sinajs.cn/list='.implode(',',$sinaarr));
+			$content = mb_convert_encoding($content, 'UTF-8' , 'EUC-CN');
+			if(preg_match_all('/(\d+)=\"([^\"]+)\"/sim', $content , $match)){
+				foreach($match[2] as $key=>$item){
+					$dataparm = explode(',',$item);
+					$zenddata[$match[1][$key]][] = $dataparm[0];
+					$amount = strval(round(($dataparm[3]-$dataparm[2])/$dataparm[2]*100,2));
+					$zenddata[$match[1][$key]][] = $amount;
+					$zenddata[$match[1][$key]][] = date('d');
+					$zenddata[$match[1][$key]][] = $data[$match[1][$key]][3];
+					$amountlist[$match[1][$key]][] = $amount;
+				}
+				arsort($amountlist);
+			}
+			unset($data);
+			unset($sinaarr);
+			foreach($amountlist as $key=>$value){
+				$data[$key] = $zenddata[$key];
+			}
+			$fp = fopen('data/SelfSelect.php', 'w');
+			fwrite($fp, '<?php $data='.var_export($data, true).';?>');
+			fclose($fp);
+		}
 		exit();
 	}
 	sleep(1);
@@ -35,7 +59,7 @@ while(1){
 			foreach($match1[1] as $item){
 				$parm = explode(',' , $item);
 				//自选
-				if(!empty($data[$parm[1]]) && (($parm[4]>3 && $data[$parm[1]][1] < 9.5) || $parm[4]>9) && empty($_SESSION[$parm[1]][4])){
+				if(!empty($data[$parm[1]]) && (($parm[4]>4 && $data[$parm[1]][1] < 9.5) || $parm[4]>9) && empty($_SESSION[$parm[1]][4])){
 					
 					$msg = "您的订单编号：\r\n".$parm[1]."\r\n,物流信息：\r\n".$parm[2];
 					$msg = urlencode($msg);
