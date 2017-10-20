@@ -59,7 +59,7 @@ while(1){
 			foreach($match1[1] as $item){
 				$parm = explode(',' , $item);
 				//自选
-				if(!empty($data[$parm[1]]) && (($parm[4]>4 && $data[$parm[1]][1] < 9.5) || $parm[4]>9) && empty($_SESSION[$parm[1]][4])){
+				if(!empty($data[$parm[1]]) && (($parm[4]>3 && $data[$parm[1]][1] < 9.5) || $parm[4]>9) && empty($_SESSION[$parm[1]][4])){
 					
 					$msg = "您的订单编号：\r\n".$parm[1]."\r\n,物流信息：\r\n".$parm[2];
 					$msg = urlencode($msg);
