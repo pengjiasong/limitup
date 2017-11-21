@@ -5,6 +5,7 @@ date_default_timezone_set('Asia/Shanghai');
 if(in_array(date('w'),array(6,7))){
 	exit();
 }
+include('data/SelfSelect.php');
 ignore_user_abort(true);
 set_time_limit(0); // 取消脚本运行时间的超时上限
 echo str_repeat(" ",1024);
@@ -12,44 +13,8 @@ echo "Running...";
 ob_flush();
 flush();
 ob_clean();
-include('data/SelfSelect.php');
 $daytemp = array();
 while(1){
-	if(date('H') >= 15){
-		if(!empty($daytemp)){
-			$fp = fopen('data/daytemp.php', 'w');
-			fwrite($fp, '<?php $data='.var_export($daytemp, true).';?>');
-			fclose($fp);
-		}
-		foreach($data as $key=>$value){
-			$sinaarr[] = $value['3'].$key;
-		}	
-		if(!empty($sinaarr)){
-			$content = file_get_contents('http://hq.sinajs.cn/list='.implode(',',$sinaarr));
-			$content = mb_convert_encoding($content, 'UTF-8' , 'EUC-CN');
-			if(preg_match_all('/(\d+)=\"([^\"]+)\"/sim', $content , $match)){
-				foreach($match[2] as $key=>$item){
-					$dataparm = explode(',',$item);
-					$zenddata[$match[1][$key]][] = $dataparm[0];
-					$amount = strval(round(($dataparm[3]-$dataparm[2])/$dataparm[2]*100,2));
-					$zenddata[$match[1][$key]][] = $amount;
-					$zenddata[$match[1][$key]][] = date('d');
-					$zenddata[$match[1][$key]][] = $data[$match[1][$key]][3];
-					$amountlist[$match[1][$key]][] = $amount;
-				}
-				arsort($amountlist);
-			}
-			unset($data);
-			unset($sinaarr);
-			foreach($amountlist as $key=>$value){
-				$data[$key] = $zenddata[$key];
-			}
-			$fp = fopen('data/SelfSelect.php', 'w');
-			fwrite($fp, '<?php $data='.var_export($data, true).';?>');
-			fclose($fp);
-		}
-		exit();
-	}
 	sleep(1);
 	$url = 'http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx/JS.aspx?type=ct&st=(ChangePercent)&sr=-1&p=1&ps=200&js=var%20mSoQyijv={pages:(pc),date:%222014-10-22%22,data:[(x)]}&token=894050c76af8597a853f5b408b759f5d&cmd=C._AB&sty=DCFFITA&rt=49698198';
 	$content = file_get_contents($url);
@@ -89,6 +54,41 @@ while(1){
 				}
 			}
 		}
+	}
+	if(date('H') >= 15){
+		if(!empty($daytemp)){
+			$fp = fopen('data/daytemp.php', 'w');
+			fwrite($fp, '<?php $data='.var_export($daytemp, true).';?>');
+			fclose($fp);
+		}
+		foreach($data as $key=>$value){
+			$sinaarr[] = $value['3'].$key;
+		}	
+		if(!empty($sinaarr)){
+			$content = file_get_contents('http://hq.sinajs.cn/list='.implode(',',$sinaarr));
+			$content = mb_convert_encoding($content, 'UTF-8' , 'EUC-CN');
+			if(preg_match_all('/(\d+)=\"([^\"]+)\"/sim', $content , $match)){
+				foreach($match[2] as $key=>$item){
+					$dataparm = explode(',',$item);
+					$zenddata[$match[1][$key]][] = $dataparm[0];
+					$amount = strval(round(($dataparm[3]-$dataparm[2])/$dataparm[2]*100,2));
+					$zenddata[$match[1][$key]][] = $amount;
+					$zenddata[$match[1][$key]][] = date('d');
+					$zenddata[$match[1][$key]][] = $data[$match[1][$key]][3];
+					$amountlist[$match[1][$key]][] = $amount;
+				}
+				arsort($amountlist);
+			}
+			unset($data);
+			unset($sinaarr);
+			foreach($amountlist as $key=>$value){
+				$data[$key] = $zenddata[$key];
+			}
+			$fp = fopen('data/SelfSelect.php', 'w');
+			fwrite($fp, '<?php $data='.var_export($data, true).';?>');
+			fclose($fp);
+		}
+		exit();
 	}
 }
 
