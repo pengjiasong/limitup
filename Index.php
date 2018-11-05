@@ -5,15 +5,23 @@ date_default_timezone_set('Asia/Shanghai');
 if(in_array(date('w'),array(6,7))){
 	exit();
 }
-// ignore_user_abort(true);
-// set_time_limit(0); // 取消脚本运行时间的超时上限
-// echo str_repeat(" ",1024);
-// echo "Running...";
-// ob_flush();
-// flush();
-// ob_clean();
-// $daytemp = array();
+file_put_contents('bb.txt','');
+file_put_contents('cc.txt','');
+ignore_user_abort(true);
+set_time_limit(0); // 取消脚本运行时间的超时上限
+echo str_repeat(" ",1024);
+echo "Running...";
+ob_flush();
+flush();
+ob_clean();
+$daytemp = array();
 while(1){
+	if(date('Hi')>=1530){
+		exit();
+	}
+	if(date('Hi')<0930){
+		continue;
+	}
 	$url = 'http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx/JS.aspx?type=ct&st=(ChangePercent)&sr=-1&p=1&ps=200&js=var%20mSoQyijv={pages:(pc),date:%222014-10-22%22,data:[(x)]}&token=894050c76af8597a853f5b408b759f5d&cmd=C._AB&sty=DCFFITA&rt=49698198';
 	$content = file_get_contents($url);
 
@@ -21,33 +29,35 @@ while(1){
 		if(preg_match_all('/\"([^\"]+)\"/' , $match[1] , $match1)){
 			foreach($match1[1] as $item){
 				$parm = explode(',' , $item);
+				if(isset($_SESSION['a'.$parm[1]])){
+					if(time()-$_SESSION['a'.$parm[1]]['time']>30 & $parm[4] <9.7 && $_SESSION['a'.$parm[1]]['send'] == 0){
+						$msg = "您的订单编号：\r\n".$parm[1]."\r\n,物流信息：\r\n".$parm[2];
+						file_put_contents('cc.txt',$msg,FILE_APPEND);
+						$msg = urlencode($msg);
+						$_SESSION['a'.$parm[1]]['send'] = 1;
+						send($msg,18580716334);
+					}
+				}
 				$hiscontent = file_get_contents('http://quotes.money.163.com/trade/lsjysj_'.$parm[1].'.html');
-				if($parm[4]>5 && !isset($_SESSION['a'.$parm[1]]) && substr($parm[1] , 0 , 1 ) != 3 && $parm[3] < 17){
+				if($parm[4]>9.5 && !isset($_SESSION['a'.$parm[1]]) && substr($parm[1] , 0 , 1 ) != 3 && $parm[3] < 11){
 					$hiscontent = file_get_contents('http://quotes.money.163.com/trade/lsjysj_'.$parm[1].'.html');
-					$_SESSION['a'.$parm[1]] = 0;
-					//'http://money.finance.sina.com.cn/corp/go.php/vMS_MarketHistory/stockid/'.$parm[1].'.phtml';
+					$_SESSION['a'.$parm[1]]['send'] = 0;
 					if(preg_match_all('/<tr class=\'(dbrow){0,1}\'>(<td[^<>]*>[^<>]*<\/td>){4}<td[^<]*>(\d+\.\d+)<\/td>/sim',$hiscontent,$match)){
 						$fiveday = strval(round(($match[3][0]-$match[3][5])/$match[3][5]*100,2));
 						// $tenday = strval(round(($match[3][0]-$match[3][10])/$match[3][10]*100,2));
 						// $twoday = strval(round(($match[3][0]-$match[3][2])/$match[3][2]*100,2));
 						if($fiveday > 5){
-							$msg = "您的订单编号：\r\n".$parm[1]."\r\n,物流信息：\r\n".$parm[2];
-							if($parm[4]<9.7 && $_SESSION['a'.$parm[1]] == 0 && date('Hi')>=930 && date('Hi') < 1130){
-								$_SESSION['a'.$parm[1]] = 1;
-								file_put_contents('bb.txt',$msg,FILE_APPEND);
-								$msg = urlencode($msg);
-								send($msg,18580716334);
-							}else if($_SESSION['a'.$parm[1]] == 0){
-								$_SESSION['a'.$parm[1]] = 1;
-								file_put_contents('bb.txt',$msg,FILE_APPEND);
-							}
+							$_SESSION['a'.$parm[1]]['time'] = time();
+							$_SESSION['a'.$parm[1]]['fudu'] = $parm[4];
+							$_SESSION['a'.$parm[1]]['send'] = 0;
+							$msg = "name：".$parm[1].",code：".$parm[2]."\r\n";
+							file_put_contents('bb.txt',$msg,FILE_APPEND);
 						}
 					}
 				}
 			}
 		}
 	}
-	exit;
 	sleep(2);
 }
 
