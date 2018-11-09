@@ -5,6 +5,7 @@ date_default_timezone_set('Asia/Shanghai');
 if(in_array(date('w'),array(6,7))){
 	exit();
 }
+
 file_put_contents('bb.txt','');
 file_put_contents('cc.txt','');
 ignore_user_abort(true);
@@ -19,7 +20,7 @@ while(1){
 	if(date('Hi')>=1530){
 		exit();
 	}
-	if(date('Hi')<0930){
+	if(date('Hi')<'0930'){
 		continue;
 	}
 	$url = 'http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx/JS.aspx?type=ct&st=(ChangePercent)&sr=-1&p=1&ps=200&js=var%20mSoQyijv={pages:(pc),date:%222014-10-22%22,data:[(x)]}&token=894050c76af8597a853f5b408b759f5d&cmd=C._AB&sty=DCFFITA&rt=49698198';
@@ -31,26 +32,33 @@ while(1){
 				$parm = explode(',' , $item);
 				if(isset($_SESSION['a'.$parm[1]])){
 					if(time()-$_SESSION['a'.$parm[1]]['time']>30 & $parm[4] <9.7 && $_SESSION['a'.$parm[1]]['send'] == 0){
-						$msg = "您的订单编号：\r\n".$parm[1]."\r\n,物流信息：\r\n".$parm[2];
+						// $msg = "您的订单编号：\r\n".$parm[1]."\r\n,物流信息：\r\n".$parm[2];
+						$msg = "name：".$parm[1].",code：".$parm[2].",fivedaytop：".$_SESSION['a'.$parm[1]]['fivedaytop']."\r\n";
 						file_put_contents('cc.txt',$msg,FILE_APPEND);
-						$msg = urlencode($msg);
+						// $msg = urlencode($msg);
 						$_SESSION['a'.$parm[1]]['send'] = 1;
-						send($msg,18580716334);
+						// send($msg,18580716334);
 					}
 				}
-				$hiscontent = file_get_contents('http://quotes.money.163.com/trade/lsjysj_'.$parm[1].'.html');
-				if($parm[4]>9.5 && !isset($_SESSION['a'.$parm[1]]) && substr($parm[1] , 0 , 1 ) != 3 && $parm[3] < 11){
+				if($parm[4]>9.8 && !isset($_SESSION['a'.$parm[1]]) && substr($parm[1] , 0 , 1 ) != 3 && $parm[3] < 50){
 					$hiscontent = file_get_contents('http://quotes.money.163.com/trade/lsjysj_'.$parm[1].'.html');
-					$_SESSION['a'.$parm[1]]['send'] = 0;
-					if(preg_match_all('/<tr class=\'(dbrow){0,1}\'>(<td[^<>]*>[^<>]*<\/td>){4}<td[^<]*>(\d+\.\d+)<\/td>/sim',$hiscontent,$match)){
-						$fiveday = strval(round(($match[3][0]-$match[3][5])/$match[3][5]*100,2));
+					// $_SESSION['a'.$parm[1]]['send'] = 0;
+					if(preg_match_all('/<tr class=\'(dbrow){0,1}\'>(<td[^<>]*>[^<>]*<\/td>){6}<td[^<]*>(-{0,1}\d+\.\d+)<\/td>/sim',$hiscontent,$match)){
+						// $fiveday = strval(round(($match[3][0]-$match[3][5])/$match[3][5]*100,2));
 						// $tenday = strval(round(($match[3][0]-$match[3][10])/$match[3][10]*100,2));
 						// $twoday = strval(round(($match[3][0]-$match[3][2])/$match[3][2]*100,2));
-						if($fiveday > 5){
+						$fivedaytop = 0;
+						for($i = 0; $i <=5 ; $i ++){
+							if($match[3][$i] > 9.8){
+								$fivedaytop++;
+							}
+						}
+						if($fivedaytop >= 2 ){
 							$_SESSION['a'.$parm[1]]['time'] = time();
 							$_SESSION['a'.$parm[1]]['fudu'] = $parm[4];
 							$_SESSION['a'.$parm[1]]['send'] = 0;
-							$msg = "name：".$parm[1].",code：".$parm[2]."\r\n";
+							$_SESSION['a'.$parm[1]]['fivedaytop'] = $fivedaytop;
+							$msg = "name：".$parm[1].",code：".$parm[2].",fivedaytop：".$fivedaytop."\r\n";
 							file_put_contents('bb.txt',$msg,FILE_APPEND);
 						}
 					}
@@ -58,7 +66,7 @@ while(1){
 			}
 		}
 	}
-	sleep(2);
+	sleep(3);
 }
 
 
