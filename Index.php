@@ -53,7 +53,7 @@ while(1){
 								$fivedaytop++;
 							}
 						}
-						if($fivedaytop >= 2 ){
+						if($fivedaytop >= 1 ){
 							$_SESSION['a'.$parm[1]]['time'] = time();
 							$_SESSION['a'.$parm[1]]['fudu'] = $parm[4];
 							$_SESSION['a'.$parm[1]]['send'] = 0;

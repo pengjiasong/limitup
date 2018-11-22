@@ -1,7 +1,9 @@
-name：002054,code：德美化工,fivedaytop：4
-name：600462,code：九有股份,fivedaytop：4
-name：600689,code：上海三毛,fivedaytop：4
-name：600624,code：复旦复华,fivedaytop：3
-name：600128,code：弘业股份,fivedaytop：5
-name：600283,code：钱江水利,fivedaytop：2
-name：600783,code：鲁信创投,fivedaytop：4
+name：603787,code：新日股份,fivedaytop：2
+name：002504,code：弘高创意,fivedaytop：2
+name：002217,code：合力泰,fivedaytop：2
+name：603906,code：龙蟠科技,fivedaytop：1
+name：600825,code：新华传媒,fivedaytop：4
+name：002337,code：赛象科技,fivedaytop：2
+name：000007,code：全新好,fivedaytop：1
+name：002451,code：摩恩电气,fivedaytop：3
+name：002708,code：光洋股份,fivedaytop：5
