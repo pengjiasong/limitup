@@ -1,9 +1,4 @@
-name：603787,code：新日股份,fivedaytop：2
-name：002504,code：弘高创意,fivedaytop：2
-name：002217,code：合力泰,fivedaytop：2
-name：603906,code：龙蟠科技,fivedaytop：1
-name：600825,code：新华传媒,fivedaytop：4
-name：002337,code：赛象科技,fivedaytop：2
-name：000007,code：全新好,fivedaytop：1
-name：002451,code：摩恩电气,fivedaytop：3
-name：002708,code：光洋股份,fivedaytop：5
+name：002907,code：华森制药,fivedaytop：1
+name：002417,code：深南股份,fivedaytop：2
+name：002927,code：泰永长征,fivedaytop：3
+name：002163,code：中航三鑫,fivedaytop：1

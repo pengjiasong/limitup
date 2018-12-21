@@ -44,11 +44,8 @@ while(1){
 					$hiscontent = file_get_contents('http://quotes.money.163.com/trade/lsjysj_'.$parm[1].'.html');
 					// $_SESSION['a'.$parm[1]]['send'] = 0;
 					if(preg_match_all('/<tr class=\'(dbrow){0,1}\'>(<td[^<>]*>[^<>]*<\/td>){6}<td[^<]*>(-{0,1}\d+\.\d+)<\/td>/sim',$hiscontent,$match)){
-						// $fiveday = strval(round(($match[3][0]-$match[3][5])/$match[3][5]*100,2));
-						// $tenday = strval(round(($match[3][0]-$match[3][10])/$match[3][10]*100,2));
-						// $twoday = strval(round(($match[3][0]-$match[3][2])/$match[3][2]*100,2));
 						$fivedaytop = 0;
-						for($i = 0; $i <=5 ; $i ++){
+						for($i = 0; $i <=10 ; $i ++){
 							if($match[3][$i] > 9.8){
 								$fivedaytop++;
 							}
