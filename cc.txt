@@ -1,3 +1,0 @@
-name：002871,code：伟隆股份,fivedaytop：1
-name：002927,code：泰永长征,fivedaytop：4
-name：600775,code：南京熊猫,fivedaytop：2
