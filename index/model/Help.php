@@ -4,9 +4,33 @@ use think\Model;
 
 class Help extends Model{
 
-    function __construct(){
-        $this->dbserver = model('DBService','service');
-    }
+	protected $table = 'zhuce';
+    protected $field = '*';
+    protected $where = [];
+	protected $whereOr = [];
+	protected $union = [];
+	protected $join = [];
+	protected $alias = '';
+	protected $group = '';
+	protected $order = '';
+	protected $connect;
+	protected $thisModel = '';
+
+	function __construct($table = ''){
+		$this->table = $table ?: $this->table;
+		
+		$dbs = config('ES.DBS');
+		if(in_array($this->table , $dbs)){
+			$this->model = model('Elasticsearch','service');
+		}else{
+			$this->model = $this::connect($this->connect);
+		}
+	}
+
+    protected function selectModel(){
+        $this->thisModel = $this->model->table($this->table)->alias($this->alias)->field($this->field)
+			->join($this->join)->where($this->where)->group($this->group)->order($this->order);
+	}
 
     public function getList($map = []){
 		// $this->checkModel($map);
@@ -14,10 +38,9 @@ class Help extends Model{
         return $return;
     }
 	
-    public function getOne($map = []){
-		$this->checkModel($map);
-        $return = $this->dbserver->_findOne($this->model,$map);
-        return $return;
+    public function getOne(){
+		$this->selectModel();
+		return $this->thisModel->select();
     }
 	
     // public function select($map = []){

@@ -9,6 +9,10 @@ class Help extends Common
 		$this->logic = model('Help','logic');
     }
 	
+    public function index(){
+        return $res;
+    }
+	
     /**
      * [category 获取帮助分类]
      * @access public 

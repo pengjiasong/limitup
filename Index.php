@@ -17,8 +17,10 @@ flush();
 ob_clean();
 $daytemp = array();
 while(1){
-	if(date('Hi')>=1530){
-		exit();
+	$datetime = date('Hi');
+	if($datetime >=1530){
+		unset($_SESSION);
+		file_put_contents('bb.txt','');
 	}
 	if(date('Hi')<'0930'){
 		continue;
@@ -51,7 +53,10 @@ while(1){
 								$fivedaytop++;
 							}
 						}
-						if($fivedaytop >= 1 ){
+						if($datetime>=1530 && $fivedaytop >= 2){
+							$msg = "name：".$parm[1].",code：".$parm[2].",fivedaytop：".$fivedaytop."\r\n";
+							file_put_contents('bb.txt',$msg,FILE_APPEND);
+						}else if($datetime<1530 && $fivedaytop >= 1 ){
 							$_SESSION['a'.$parm[1]]['time'] = time();
 							$_SESSION['a'.$parm[1]]['fudu'] = $parm[4];
 							$_SESSION['a'.$parm[1]]['send'] = 0;
@@ -64,7 +69,10 @@ while(1){
 			}
 		}
 	}
-	sleep(3);
+	if($datetime>=1530){
+		exit();
+	}
+	sleep(4);
 }
 
 

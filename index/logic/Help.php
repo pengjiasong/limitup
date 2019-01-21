@@ -21,7 +21,8 @@ class Help extends Model{
 		$code = 200;
         $res = [];
 		
-		$res = model('Help')->select();
+		$res = model('help')->getOne('zhuce');
+		print_r($res);
 		exit;
         if (!$res) {
             $code = 404;
