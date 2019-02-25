@@ -52,12 +52,14 @@ while(1){
 							}
 						}
 						if($datetime>=1530 && $fivedaytop >= 3){
-							$_SESSION['a'.$parm[1]]['time'] = time();
-							$_SESSION['a'.$parm[1]]['fudu'] = $parm[4];
-							$_SESSION['a'.$parm[1]]['send'] = 0;
-							$_SESSION['a'.$parm[1]]['fivedaytop'] = $fivedaytop;
 							$msg = "name：".$parm[1].",code：".$parm[2].",fivedaytop：".$fivedaytop."\r\n";
 							file_put_contents('bb.txt',$msg,FILE_APPEND);
+							if(!empty($_SESSION)){
+								$fp = fopen('data/breakthrough.php', 'w');
+								fwrite($fp, '<?php $data='.var_export($_SESSION, true).';?>');
+								fclose($fp);
+								echo '<a href="Analysis.php?datafile=breakthrough">breakthrough</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+							}
 						}else if($datetime<1530 && $fivedaytop >= 3 ){
 							$_SESSION['a'.$parm[1]]['time'] = time();
 							$_SESSION['a'.$parm[1]]['fudu'] = $parm[4];
