@@ -32,7 +32,6 @@ while(1){
 		if(preg_match_all('/\"([^\"]+)\"/' , $match[1] , $match1)){
 			foreach($match1[1] as $item){
 				$parm = explode(',' , $item);
-				/*
 				if(isset($_SESSION['a'.$parm[1]])){
 					if(time()-$_SESSION['a'.$parm[1]]['time']>30 & $parm[4] <9.7 && $_SESSION['a'.$parm[1]]['send'] == 0){
 						// $msg = "您的订单编号：\r\n".$parm[1]."\r\n,物流信息：\r\n".$parm[2];
@@ -43,7 +42,6 @@ while(1){
 						// send($msg,18580716334);
 					}
 				}
-				*/
 				if($parm[4]>9.8 && !isset($_SESSION['a'.$parm[1]]) && substr($parm[1] , 0 , 1 ) != 3 && $parm[3] < 50){
 					$hiscontent = file_get_contents('http://quotes.money.163.com/trade/lsjysj_'.$parm[1].'.html');
 					if(preg_match_all('/<tr class=\'(dbrow){0,1}\'>(<td[^<>]*>[^<>]*<\/td>){6}<td[^<]*>(-{0,1}\d+\.\d+)<\/td>/sim',$hiscontent,$match)){
@@ -53,10 +51,14 @@ while(1){
 								$fivedaytop++;
 							}
 						}
-						if($datetime>=1530 && $fivedaytop >= 2){
+						if($datetime>=1530 && $fivedaytop >= 3){
+							$_SESSION['a'.$parm[1]]['time'] = time();
+							$_SESSION['a'.$parm[1]]['fudu'] = $parm[4];
+							$_SESSION['a'.$parm[1]]['send'] = 0;
+							$_SESSION['a'.$parm[1]]['fivedaytop'] = $fivedaytop;
 							$msg = "name：".$parm[1].",code：".$parm[2].",fivedaytop：".$fivedaytop."\r\n";
 							file_put_contents('bb.txt',$msg,FILE_APPEND);
-						}else if($datetime<1530 && $fivedaytop >= 1 ){
+						}else if($datetime<1530 && $fivedaytop >= 3 ){
 							$_SESSION['a'.$parm[1]]['time'] = time();
 							$_SESSION['a'.$parm[1]]['fudu'] = $parm[4];
 							$_SESSION['a'.$parm[1]]['send'] = 0;
