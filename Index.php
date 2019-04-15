@@ -8,7 +8,6 @@ if(in_array(date('w'),array(6,7))){
 
 file_put_contents('bb.txt','');
 file_put_contents('cc.txt','');
-file_put_contents('ff.txt','');
 ignore_user_abort(true);
 set_time_limit(0); // 取消脚本运行时间的超时上限
 echo str_repeat(" ",1024);
