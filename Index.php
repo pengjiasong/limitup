@@ -8,6 +8,7 @@ if(in_array(date('w'),array(6,7))){
 
 file_put_contents('bb.txt','');
 file_put_contents('cc.txt','');
+file_put_contents('ff.txt','');
 ignore_user_abort(true);
 set_time_limit(0); // 取消脚本运行时间的超时上限
 echo str_repeat(" ",1024);
@@ -18,11 +19,7 @@ ob_clean();
 $daytemp = array();
 while(1){
 	$datetime = date('Hi');
-	if($datetime >=1530){
-		unset($_SESSION);
-		file_put_contents('bb.txt','');
-	}
-	if(date('Hi')<'0930'){
+	if($datetime<'0930' || ($datetime>'1130' && $datetime<'1300')){
 		continue;
 	}
 	$url = 'http://nufm.dfcfw.com/EM_Finance2014NumericApplication/JS.aspx/JS.aspx?type=ct&st=(ChangePercent)&sr=-1&p=1&ps=200&js=var%20mSoQyijv={pages:(pc),date:%222014-10-22%22,data:[(x)]}&token=894050c76af8597a853f5b408b759f5d&cmd=C._AB&sty=DCFFITA&rt=49698198';
@@ -37,6 +34,7 @@ while(1){
 						// $msg = "您的订单编号：\r\n".$parm[1]."\r\n,物流信息：\r\n".$parm[2];
 						$msg = "name：".$parm[1].",code：".$parm[2].",fivedaytop：".$_SESSION['a'.$parm[1]]['fivedaytop']."\r\n";
 						file_put_contents('cc.txt',$msg,FILE_APPEND);
+						file_put_contents('ss.txt',','.$parm[1],FILE_APPEND);
 						// $msg = urlencode($msg);
 						$_SESSION['a'.$parm[1]]['send'] = 1;
 						// send($msg,18580716334);
@@ -51,16 +49,10 @@ while(1){
 								$fivedaytop++;
 							}
 						}
-						if($datetime>=1530 && $fivedaytop >= 3){
+						if($datetime>=1530 && $fivedaytop >= 2){
 							$msg = "name：".$parm[1].",code：".$parm[2].",fivedaytop：".$fivedaytop."\r\n";
 							file_put_contents('bb.txt',$msg,FILE_APPEND);
-							if(!empty($_SESSION)){
-								$fp = fopen('data/breakthrough.php', 'w');
-								fwrite($fp, '<?php $data='.var_export($_SESSION, true).';?>');
-								fclose($fp);
-								echo '<a href="Analysis.php?datafile=breakthrough">breakthrough</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-							}
-						}else if($datetime<1530 && $fivedaytop >= 2 ){
+						}else if($datetime<1530 && $fivedaytop >= 1 ){ 
 							$_SESSION['a'.$parm[1]]['time'] = time();
 							$_SESSION['a'.$parm[1]]['fudu'] = $parm[4];
 							$_SESSION['a'.$parm[1]]['send'] = 0;
